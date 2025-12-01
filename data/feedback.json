@@ -1,0 +1,114 @@
+{
+  "feedbacks": [
+    {
+      "id": "1760352615430",
+      "timestamp": "2025-10-13T10:50:15.430Z",
+      "recommended_beverage": "Tropical Smoothie",
+      "weather": "Sunny",
+      "mood": "Excited",
+      "temperature": 24,
+      "humidity": 60,
+      "liked": true,
+      "comment": ""
+    },
+    {
+      "id": "1760352625010",
+      "timestamp": "2025-10-13T10:50:25.010Z",
+      "recommended_beverage": "Tropical Smoothie",
+      "weather": "Sunny",
+      "mood": "Excited",
+      "temperature": 24,
+      "humidity": 60,
+      "liked": false,
+      "comment": ""
+    },
+    {
+      "id": "1760353059532",
+      "timestamp": "2025-10-13T10:57:39.532Z",
+      "recommended_beverage": "Chocolate Smoothie",
+      "weather": "Sunny",
+      "mood": "Sad",
+      "temperature": 24,
+      "humidity": 60,
+      "liked": true,
+      "comment": ""
+    },
+    {
+      "id": "1760353329949",
+      "timestamp": "2025-10-13T11:02:09.949Z",
+      "recommended_beverage": "Iced Mocha",
+      "weather": "Sunny",
+      "mood": "Sad",
+      "temperature": 24,
+      "humidity": 60,
+      "liked": true,
+      "comment": ""
+    },
+    {
+      "id": "1760354657239",
+      "timestamp": "2025-10-13T11:24:17.239Z",
+      "recommended_beverage": "Iced Mocha",
+      "weather": "Sunny",
+      "mood": "Sad",
+      "temperature": 28,
+      "humidity": 50,
+      "liked": false,
+      "comment": ""
+    },
+    {
+      "id": "1760355068603",
+      "timestamp": "2025-10-13T11:31:08.603Z",
+      "recommended_beverage": "Iced Tea",
+      "weather": "Hot",
+      "mood": "Happy",
+      "temperature": 31,
+      "humidity": 33,
+      "liked": false,
+      "comment": "Testing feedback learning"
+    },
+    {
+      "id": "1760355414551",
+      "timestamp": "2025-10-13T11:36:54.552Z",
+      "recommended_beverage": "Chocolate Smoothie",
+      "weather": "Sunny",
+      "mood": "Sad",
+      "temperature": 28,
+      "humidity": 54,
+      "liked": false,
+      "comment": ""
+    },
+    {
+      "id": "1760435275492",
+      "timestamp": "2025-10-14T09:47:55.492Z",
+      "recommended_beverage": "Coconut Water",
+      "weather": "Hot",
+      "mood": "Relaxed",
+      "temperature": 32,
+      "humidity": 36,
+      "liked": false,
+      "comment": ""
+    },
+    {
+      "id": "1760435824094",
+      "timestamp": "2025-10-14T09:57:04.094Z",
+      "recommended_beverage": "Iced Herbal Tea",
+      "weather": "Hot",
+      "mood": "Relaxed",
+      "temperature": 32,
+      "humidity": 36,
+      "liked": true,
+      "comment": ""
+    },
+    {
+      "id": "1760505965329",
+      "timestamp": "2025-10-15T05:26:05.329Z",
+      "recommended_beverage": "Iced Coffee",
+      "weather": "Sunny",
+      "mood": "Tired",
+      "temperature": 29,
+      "humidity": 49,
+      "liked": true,
+      "comment": ""
+    }
+  ]
+}

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍹 Beverage Recommender</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 550px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 15px;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result.success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .result.error {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+        }
+
+        .result h2 {
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .result p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .weather-info {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .weather-info p {
+            margin-bottom: 5px;
+        }
+
+        .feedback-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .feedback-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-feedback {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid white;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-feedback:hover {
+            background: white;
+            color: #11998e;
+            transform: scale(1.05);
+        }
+
+        .btn-feedback:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback-message {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            animation: fadeIn 0.5s;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-box p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+        }
+
+        .location-note {
+            font-size: 0.85em;
+            color: #888;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍹 Beverage Recommender</h1>
+        <p class="subtitle">Find your perfect drink based on local weather and mood</p>
+
+        <form id="recommendationForm">
+            <div class="form-group">
+                <label for="mood">
+                    <span class="emoji">😊</span> How are you feeling?
+                </label>
+                <select id="mood" required>
+                    <option value="">Select your mood...</option>
+                    <option value="Happy">😊 Happy</option>
+                    <option value="Sad">😢 Sad</option>
+                    <option value="Energetic">⚡ Energetic</option>
+                    <option value="Tired">😴 Tired</option>
+                    <option value="Stressed">😰 Stressed</option>
+                    <option value="Relaxed">😌 Relaxed</option>
+                    <option value="Focused">🎯 Focused</option>
+                    <option value="Excited">🎉 Excited</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-primary" id="getRecommendation">
+                    Get Recommendation
+                </button>
+                <button type="button" class="btn-secondary" onclick="clearResult()">
+                    Clear
+                </button>
+            </div>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Getting weather data and analyzing...</p>
+        </div>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000/api/beverage';
+        
+        // Jodhpur coordinates (default)
+        const DEFAULT_LOCATION = {
+            latitude: 26.2389,
+            longitude: 73.0243,
+            name: 'Jodhpur (Default)'
+        };
+
+        let currentRecommendation = null;
+        
+        document.getElementById('recommendationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const mood = document.getElementById('mood').value;
+            
+            if (!mood) {
+                showError('Please select your mood!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            document.getElementById('result').classList.remove('show');
+            document.getElementById('getRecommendation').disabled = true;
+
+            // Check if geolocation is supported
+            if (!navigator.geolocation) {
+                console.log('Geolocation not supported, using Jodhpur as default');
+                await getRecommendationForLocation(DEFAULT_LOCATION.latitude, DEFAULT_LOCATION.longitude, mood, true);
+                return;
+            }
+
+            // Try to get user location
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    await getRecommendationForLocation(latitude, longitude, mood, false);
+                },
+                async (error) => {
+                    console.log('Geolocation error, using Jodhpur as default:', error);
+                    await getRecommendationForLocation(DEFAULT_LOCATION.latitude, DEFAULT_LOCATION.longitude, mood, true);
+                },
+                {
+                    timeout: 5000,
+                    maximumAge: 60000
+                }
+            );
+        });
+
+        async function getRecommendationForLocation(latitude, longitude, mood, isDefault) {
+            try {
+                console.log('Location:', { latitude, longitude, mood, isDefault });
+
+                // Call API with location
+                const response = await fetch(`${API_BASE_URL}/recommend-location`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        latitude,
+                        longitude,
+                        mood
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to get recommendation');
+                }
+
+                // Store current recommendation for feedback
+                currentRecommendation = {
+                    recommended_beverage: data.recommended_beverage,
+                    weather: data.weather_data.weather,
+                    mood: mood,
+                    temperature: data.weather_data.temperature,
+                    humidity: data.weather_data.humidity
+                };
+
+                showSuccess(data, isDefault);
+            } catch (error) {
+                console.error('Error:', error);
+                showError(error.message || 'Failed to get recommendation. Make sure the server is running!');
+            } finally {
+                document.getElementById('loading').classList.remove('show');
+                document.getElementById('getRecommendation').disabled = false;
+            }
+        }
+
+        function showSuccess(data, isDefault) {
+            const resultDiv = document.getElementById('result');
+            
+            const weatherEmoji = getWeatherEmoji(data.weather_data.weather);
+            const moodEmoji = getMoodEmoji(data.input_data.mood);
+            const timeEmoji = getTimeEmoji(data.input_data.timeOfDay);
+
+            const locationText = isDefault ? 
+                `Jodhpur` : 
+                `${data.location_data.location}, ${data.location_data.country}`;
+
+            const weatherDesc = data.weather_data.description && 
+                              !data.weather_data.description.includes('Default') && 
+                              !data.weather_data.description.includes('API key') ? 
+                              `(${data.weather_data.description})` : '';
+
+            resultDiv.className = 'result success show';
+            resultDiv.innerHTML = `
+                <h2>🍹 ${data.recommended_beverage}</h2>
+                <p><strong>Why this drink?</strong></p>
+                <p>${data.reason}</p>
+                
+                <div class="weather-info">
+                    <p><strong>${weatherEmoji} Weather:</strong> ${data.weather_data.weather} ${weatherDesc}</p>
+                    <p><strong>🌡️ Temperature:</strong> ${data.weather_data.temperature}°C</p>
+                    <p><strong>💧 Humidity:</strong> ${data.weather_data.humidity}%</p>
+                    <p><strong>📍 Location:</strong> ${locationText}</p>
+                    <p><strong>${moodEmoji} Your Mood:</strong> ${data.input_data.mood}</p>
+                    <p><strong>${timeEmoji} Time:</strong> ${data.input_data.timeOfDay}</p>
+                </div>
+
+                <div class="feedback-section">
+                    <p><strong>Was this recommendation helpful?</strong></p>
+                    <div class="feedback-buttons">
+                        <button class="btn-feedback" onclick="submitFeedback(true)">
+                            👍 Love it!
+                        </button>
+                        <button class="btn-feedback" onclick="submitFeedback(false)">
+                            👎 Not satisfied
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function submitFeedback(liked) {
+            if (!currentRecommendation) {
+                return;
+            }
+
+            try {
+                // Disable feedback buttons immediately
+                const buttons = document.querySelectorAll('.btn-feedback');
+                buttons.forEach(btn => btn.disabled = true);
+
+                const response = await fetch(`${API_BASE_URL}/feedback`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        ...currentRecommendation,
+                        liked: liked
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Permanently replace buttons with thank you message
+                    const feedbackSection = document.querySelector('.feedback-section');
+                    const thankYouMessage = liked ? 
+                        '🎉 Thank you! We\'re glad you liked it!' : 
+                        '📝 Thank you for your feedback! We\'ll improve our recommendations.';
+                    
+                    feedbackSection.innerHTML = `
+                        <p><strong>Was this recommendation helpful?</strong></p>
+                        <div class="feedback-message">
+                            ${thankYouMessage}
+                        </div>
+                    `;
+                } else {
+                    throw new Error(data.error || 'Failed to submit feedback');
+                }
+            } catch (error) {
+                console.error('Feedback error:', error);
+                alert('Failed to submit feedback. Please try again.');
+                const buttons = document.querySelectorAll('.btn-feedback');
+                buttons.forEach(btn => btn.disabled = false);
+            }
+        }
+
+        function showError(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = 'result error show';
+            resultDiv.innerHTML = `
+                <h2>❌ Oops!</h2>
+                <p>${message}</p>
+            `;
+        }
+
+        function clearResult() {
+            document.getElementById('result').classList.remove('show');
+            document.getElementById('mood').value = '';
+            currentRecommendation = null;
+        }
+
+        function getWeatherEmoji(weather) {
+            const emojiMap = {
+                'Sunny': '☀️',
+                'Hot': '🔥',
+                'Cloudy': '☁️',
+                'Rainy': '🌧️',
+                'Stormy': '⛈️',
+                'Snowy': '❄️',
+                'Windy': '💨',
+                'Foggy': '🌫️',
+                'Cold': '🥶'
+            };
+            return emojiMap[weather] || '🌤️';
+        }
+
+        function getMoodEmoji(mood) {
+            const emojiMap = {
+                'Happy': '😊',
+                'Sad': '😢',
+                'Energetic': '⚡',
+                'Tired': '😴',
+                'Stressed': '😰',
+                'Relaxed': '😌',
+                'Focused': '🎯',
+                'Excited': '🎉'
+            };
+            return emojiMap[mood] || '😊';
+        }
+
+        function getTimeEmoji(time) {
+            const emojiMap = {
+                'Morning': '🌅',
+                'Afternoon': '☀️',
+                'Evening': '🌆',
+                'Night': '🌙'
+            };
+            return emojiMap[time] || '⏰';
+        }
+    </script>
+</body>
+</html>
